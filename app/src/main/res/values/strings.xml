@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">IUT Share</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_profile">Mon profil</string>
+    <string name="action_connect">Se connecter</string>
+    <string name="action_suscribe">S\'inscrire</string>
+    <string name="action_add_lesson"> Ajouter un cours</string>
+
+    <string-array name="formations">
+        <item>GEII</item>
+        <item>GMP</item>
+        <item>Informatique</item>
+        <item>Mesures Physiques</item>
+        <item>Génie Biologique</item>
+        <item>Chimie</item>
+        <item>GEA</item>
+    </string-array>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_suscribee">Suscribee</string>
+    <string name="title_activity_suscribe">SuscribeActivity</string>
+    <string name="title_activity_add_lesson">AddLesson</string>
+
+</resources>

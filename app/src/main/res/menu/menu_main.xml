@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_connect" android:title="@string/action_connect"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_suscribe" android:title="@string/action_suscribe"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_profile" android:title="@string/action_profile"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_add_lesson" android:title="@string/action_add_lesson"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>
