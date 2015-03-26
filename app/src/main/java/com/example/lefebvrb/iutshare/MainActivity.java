@@ -94,6 +94,12 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+        if(id == R.id.action_add_ad){
+            Intent intent = new Intent(MainActivity.this, AddAd.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

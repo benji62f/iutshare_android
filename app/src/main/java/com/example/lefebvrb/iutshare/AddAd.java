@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,37 +22,31 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class SuscribeActivity extends ActionBarActivity {
+public class AddAd extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_suscribe);
+        setContentView(R.layout.activity_add_ad);
         setTitle("IUT Share");
 
-        Spinner statut_sp = (Spinner) findViewById(R.id.inscription_statut_sp);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, new String[] {"Etudiant", "Enseignant"});
-        statut_sp.setAdapter(adapter);
-
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-
     }
 
 
-    public void suscribe(View view){
-        String nom = ((EditText) findViewById(R.id.inscription_nom_et)).getText().toString();
-        String prenom = ((EditText) findViewById(R.id.inscription_prenom_et)).getText().toString();
-        String pseudo = ((EditText) findViewById(R.id.inscription_pseudo_et)).getText().toString();
-        String mdp = ((EditText) findViewById(R.id.inscription_password_et)).getText().toString();
-        String type = (String) ((Spinner) findViewById(R.id.inscription_statut_sp)).getSelectedItem();
+    public void addAnAd(View view){
+        String titre = ((EditText) findViewById(R.id.annonces_titre_et)).getText().toString();
+        String description = ((EditText) findViewById(R.id.annonces_description_et)).getText().toString();
+        String lieu = ((EditText) findViewById(R.id.annonces_lieu_et)).getText().toString();
+        String type = (String) ((Spinner) findViewById(R.id.annonces_type_sp)).getSelectedItem();
 
-        System.out.println("Nom : "+nom+"\nPrenom : "+prenom+"\nPseudo : "+pseudo+"\nMot de passe : "+mdp+"\nType : "+type);
+        System.out.println("Titre : "+titre+"\nDescription : "+description+"\nLieu : "+lieu+"\nType : "+type);
 
         try {
             URL url;
             DataOutputStream printout;
             DataInputStream input;
-            url = new URL(MainActivity.URL + "v1/user/");
+            url = new URL(MainActivity.URL + "v1/annonce/");
             System.out.println(url);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -73,12 +66,11 @@ public class SuscribeActivity extends ActionBarActivity {
 
             JSONObject object = new JSONObject();
             try {
-                object.put("nom", nom);
-                object.put("prenom", prenom);
-                object.put("login", pseudo);
-                object.put("mdp", mdp);
+                object.put("titre", titre);
+                object.put("msg", description);
+                object.put("lieu", lieu);
                 object.put("type", type);
-                object.put("id", 0);
+                object.put("ano", 0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -92,12 +84,12 @@ public class SuscribeActivity extends ActionBarActivity {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             JSONObject reponse = new JSONObject(in.readLine());
-            String login = reponse.getString("login");
-            if(login == null)
-                Toast.makeText(getApplicationContext(), "L'inscription a échouée", Toast.LENGTH_LONG).show();
-            else if(login.equals(pseudo)){
-                Toast.makeText(getApplicationContext(), "Inscription réussie", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SuscribeActivity.this, LoginActivity.class);
+            String tmp = reponse.getString("titre");
+            if(tmp == null)
+                Toast.makeText(getApplicationContext(), "Echec du dépôt", Toast.LENGTH_LONG).show();
+            else if(tmp.equals(titre)){
+                Toast.makeText(getApplicationContext(), "Annonce déposée avec succès", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(AddAd.this, MainActivity.class);
                 startActivity(intent);
             }
         } catch(Exception e){
@@ -109,7 +101,7 @@ public class SuscribeActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_suscribe, menu);
+        getMenuInflater().inflate(R.menu.menu_add_ad, menu);
         return true;
     }
 

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lefebvrb.iutshare" >
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logox48"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -27,6 +30,10 @@
         <activity
             android:name=".AddLesson"
             android:label="@string/title_activity_add_lesson" >
+        </activity>
+        <activity
+            android:name=".AddAd"
+            android:label="@string/title_activity_add_ad" >
         </activity>
     </application>
 

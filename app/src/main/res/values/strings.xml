@@ -11,6 +11,7 @@
     <string name="action_connect">Se connecter</string>
     <string name="action_suscribe">S\'inscrire</string>
     <string name="action_add_lesson"> Ajouter un cours</string>
+    <string name="action_add_ad"> Ajouter une annonce</string>
 
     <string-array name="formations">
         <item>GEII</item>
@@ -26,5 +27,6 @@
     <string name="title_activity_suscribee">Suscribee</string>
     <string name="title_activity_suscribe">SuscribeActivity</string>
     <string name="title_activity_add_lesson">AddLesson</string>
+    <string name="title_activity_add_ad">AddAD</string>
 
 </resources>

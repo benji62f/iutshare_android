@@ -26,7 +26,7 @@
         android:id="@+id/section_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Inscription"/>
+        android:text="Déposer une annonce"/>
 
     <ScrollView
         android:layout_below="@id/section_label"
@@ -40,80 +40,58 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <TextView
-                android:id="@+id/inscription_nom_tv"
-                android:text="Nom :"
-                android:textSize="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/inscription_nom_et"
-                android:inputType="text"
-                android:layout_below="@id/inscription_nom_tv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/inscription_prenom_tv"
-                android:layout_below="@id/inscription_nom_et"
-                android:text="Prénom :"
-                android:textSize="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/inscription_prenom_et"
-                android:inputType="text"
-                android:layout_below="@id/inscription_prenom_tv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/inscription_pseudo_tv"
-                android:layout_below="@id/inscription_prenom_et"
-                android:text="Pseudo :"
-                android:textSize="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/inscription_pseudo_et"
-                android:inputType="text"
-                android:layout_below="@id/inscription_pseudo_tv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/inscription_password_tv"
-                android:layout_below="@id/inscription_pseudo_et"
-                android:text="Mot de passe :"
-                android:textSize="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/inscription_password_et"
-                android:inputType="text"
-                android:layout_below="@id/inscription_password_tv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/inscription_statut_tv"
-                android:textSize="20dp"
-                android:text="Vous êtes :"
-                android:layout_below="@id/inscription_password_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
             <Spinner
-                android:id="@+id/inscription_statut_sp"
-                android:layout_alignBaseline="@id/inscription_statut_tv"
-                android:layout_toRightOf="@id/inscription_statut_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/annonces_type_sp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"></Spinner>
+            <TextView
+                android:id="@+id/annonces_titre_tv"
+                android:layout_below="@id/annonces_type_sp"
+                android:textSize="20dp"
+                android:text="Titre :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/annonces_titre_et"
+                android:layout_below="@id/annonces_titre_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/annonces_description_tv"
+                android:layout_below="@id/annonces_titre_et"
+                android:textSize="20dp"
+                android:text="Description :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/annonces_description_et"
+                android:layout_below="@id/annonces_description_tv"
+                android:hint="Description de l'annonce"
+                android:inputType="textMultiLine"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"/>
+            <TextView
+                android:id="@+id/annonces_lieu_tv"
+                android:textSize="20dp"
+                android:layout_below="@id/annonces_description_et"
+                android:text="Lieu :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/annonces_lieu_et"
+                android:layout_below="@id/annonces_lieu_tv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
             <Button
-                android:id="@+id/inscription_connexion_bt"
-                android:onClick="suscribe"
-                android:background="@color/red"
+                android:layout_below="@id/annonces_lieu_et"
+                android:onClick="addAnAd"
+                android:layout_centerInParent="true"
+                android:layout_margin="10dp"
+                android:padding="10dp"
                 android:textColor="@color/white"
-                android:padding="5dp"
-                android:layout_margin="16dp"
-                android:layout_centerHorizontal="true"
-                android:text="S'inscrire"
-                android:layout_below="@id/inscription_statut_tv"
+                android:background="@color/green"
+                android:text="Ajouter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

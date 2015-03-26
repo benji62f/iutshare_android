@@ -1,6 +1,8 @@
 package com.example.lefebvrb.iutshare;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -22,7 +24,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -45,54 +51,87 @@ public class LoginActivity extends ActionBarActivity {
         if(login.equals("") || password.equals(""))
             Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show();
          else {
+            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                try {
+                    URL url;
+                    DataOutputStream printout;
+                    DataInputStream input;
+                    url = new URL(MainActivity.URL+"v1/user/"+login+"/"+password);
+                    System.out.println(url);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setDoInput(true);
+                    //urlConnection.setDoOutput(true); Uniquement en POST
+                    urlConnection.setUseCaches(false);
 
-            /*
-            URL url;
-            DataOutputStream printout;
-            DataInputStream input;
-            url = new URL (MainActivity.URL);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput (true);
-            urlConnection.setDoOutput (true);
-            urlConnection.setUseCaches (false);
+                    urlConnection.setConnectTimeout(5000);
+                    urlConnection.setReadTimeout(5000);
 
-            urlConnection.setConnectTimeout(5000);
-            urlConnection.setReadTimeout(5000);
+                    //urlConnection.setRequestProperty("Content-Type", "application/json"); Uniquement en POST
+                    urlConnection.connect();
 
-            urlConnection.setRequestProperty("Content-Type","application/json");
-            urlConnection.connect();
+                    int reponse = urlConnection.getResponseCode();
+                    Toast.makeText(getApplicationContext(), "Code réponse : "+reponse, Toast.LENGTH_LONG).show();
 
-            JSONObject json;
-            */
+                    InputStream in = urlConnection.getInputStream();
+                    String contentAsString = readIt(in, 500);
 
-            String url = MainActivity.URL+"v1/user/"+login+"/"+password;
-            System.out.println(url);
+                    System.out.println(contentAsString);
 
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(url);
-            HttpResponse response;
-            String result = null;
-            try {
-                response = client.execute(request);
-                HttpEntity entity = response.getEntity();
-                result = EntityUtils.toString(entity);
-                System.out.println("Réponse : "+result);
-                boolean connected = false;
-                String tmp = "";
-                for(int i=0 ; i<6 ; i++)
-                    tmp+=result.charAt(i);
-
-                if(!tmp.equals("<html>")){ // Si le serveur renvoie la page 404
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else { // Le serveur renvoie la ligne de table utilisateur de l'utilisateur connecté
-                    Toast.makeText(getApplicationContext(), "Pseudo et/ou mot de passe incorrect", Toast.LENGTH_LONG).show();
+                    if(reponse == 504)
+                        Toast.makeText(getApplicationContext(), "Gateway Time-out", Toast.LENGTH_LONG).show();
+                    if(reponse == 200) {
+                        Toast.makeText(getApplicationContext(), "Vous êtes maintenant connecté", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    if(reponse == 404)
+                        Toast.makeText(getApplicationContext(), "Pseudo et/ou mot de passe incorrect", Toast.LENGTH_LONG).show();
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
-            } catch (Exception e){
-                e.printStackTrace();
+                /*
+                String url = MainActivity.URL+"v1/user/"+login+"/"+password;
+                System.out.println(url);
+
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet(url);
+                HttpResponse response;
+                String result = null;
+                try {
+                    response = client.execute(request);
+                    HttpEntity entity = response.getEntity();
+                    result = EntityUtils.toString(entity);
+                    System.out.println("Réponse : "+result);
+                    boolean connected = false;
+                    String tmp = "";
+                    for(int i=0 ; i<6 ; i++)
+                        tmp+=result.charAt(i);
+
+                    if(!tmp.equals("<html>")){ // Si le serveur renvoie la page 404
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else { // Le serveur renvoie la ligne de table utilisateur de l'utilisateur connecté
+                        Toast.makeText(getApplicationContext(), "Pseudo et/ou mot de passe incorrect", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }*/
+            } else {
+                Toast.makeText(getApplicationContext(), "Erreur connexion réseau", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    // Reads an InputStream and converts it to a String.
+    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
     }
 
 
