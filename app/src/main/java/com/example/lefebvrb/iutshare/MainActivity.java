@@ -1,8 +1,17 @@
 package com.example.lefebvrb.iutshare;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,11 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    public static final String URL = "http://bouleau20.iut-infobio.priv.univ-lille1.fr:8080/";
+    public static final String URL = "http://bouleau19.iut-infobio.priv.univ-lille1.fr:8080/";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -50,6 +64,8 @@ public class MainActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
     }
 
 
@@ -100,9 +116,51 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+        if(id == R.id.action_refresh){
+            refresh();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void refresh(){
+        try {
+            Toast.makeText(getApplicationContext(), "Raffraichissement...", Toast.LENGTH_LONG).show();
+            java.net.URL url;
+            DataOutputStream printout;
+            DataInputStream input;
+            url = new URL(MainActivity.URL + "v1/annonce/");
+            System.out.println(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            //urlConnection.setDoOutput(true);
+            urlConnection.setUseCaches(false);
+
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
+
+            //urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("User-Agent", "GYUserAgentAndroid");
+            urlConnection.setRequestProperty("Accept", "*/*");
+            //urlConnection.connect();
+
+            //int reponse = urlConnection.getResponseCode();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            JSONArray reponse = new JSONArray(in.readLine());
+            System.out.println("Réponse : "+reponse);
+            List<Annonce> annonces = new ArrayList<Annonce>();
+            for(int i=0 ; i<reponse.length() ; i++){
+                JSONObject current = (JSONObject) reponse.get(i);
+                System.out.println("JSON : "+current);
+                annonces.add((Annonce) (current.get(""))); // Problème d'absence de clé dans le JSONObject
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,6 +32,10 @@ public class AddAd extends ActionBarActivity {
         setTitle("IUT Share");
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
+        Spinner type_sp = (Spinner) findViewById(R.id.annonces_type_sp);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, new String[] {"Je propose", "Je recherche"});
+        type_sp.setAdapter(adapter);
     }
 
 
@@ -42,59 +47,62 @@ public class AddAd extends ActionBarActivity {
 
         System.out.println("Titre : "+titre+"\nDescription : "+description+"\nLieu : "+lieu+"\nType : "+type);
 
-        try {
-            URL url;
-            DataOutputStream printout;
-            DataInputStream input;
-            url = new URL(MainActivity.URL + "v1/annonce/");
-            System.out.println(url);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-            urlConnection.setUseCaches(false);
-
-            urlConnection.setConnectTimeout(5000);
-            urlConnection.setReadTimeout(5000);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("User-Agent", "GYUserAgentAndroid");
-            urlConnection.setRequestProperty("Accept","*/*");
-            //urlConnection.connect();
-
-            //int reponse = urlConnection.getResponseCode();
-
-            JSONObject object = new JSONObject();
+        if(titre.equals("") || description.equals("") || lieu.equals("") || type.equals("")){
+            Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show();
+        } else {
             try {
-                object.put("titre", titre);
-                object.put("msg", description);
-                object.put("lieu", lieu);
-                object.put("type", type);
-                object.put("ano", 0);
-            } catch (JSONException e) {
+                URL url;
+                DataOutputStream printout;
+                DataInputStream input;
+                url = new URL(MainActivity.URL + "v1/annonce/");
+                System.out.println(url);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+                urlConnection.setUseCaches(false);
+
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.setReadTimeout(5000);
+
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("User-Agent", "GYUserAgentAndroid");
+                urlConnection.setRequestProperty("Accept","*/*");
+                //urlConnection.connect();
+
+                //int reponse = urlConnection.getResponseCode();
+
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("titre", titre);
+                    object.put("msg", description);
+                    object.put("lieu", lieu);
+                    object.put("type", type);
+                    object.put("ano", 0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(object);
+
+                DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
+                out.writeBytes(object.toString());
+                out.flush();
+                out.close();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                JSONObject reponse = new JSONObject(in.readLine());
+                String tmp = reponse.getString("titre");
+                if(tmp == null)
+                    Toast.makeText(getApplicationContext(), "Echec du dépôt", Toast.LENGTH_LONG).show();
+                else if(tmp.equals(titre)){
+                    Toast.makeText(getApplicationContext(), "Annonce déposée avec succès", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AddAd.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            } catch(Exception e){
                 e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Erreur connexion réseau", Toast.LENGTH_LONG).show();
             }
-            System.out.println(object);
-
-
-            DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-            out.writeBytes(object.toString());
-            out.flush();
-            out.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            JSONObject reponse = new JSONObject(in.readLine());
-            String tmp = reponse.getString("titre");
-            if(tmp == null)
-                Toast.makeText(getApplicationContext(), "Echec du dépôt", Toast.LENGTH_LONG).show();
-            else if(tmp.equals(titre)){
-                Toast.makeText(getApplicationContext(), "Annonce déposée avec succès", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(AddAd.this, MainActivity.class);
-                startActivity(intent);
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Erreur connexion réseau", Toast.LENGTH_LONG).show();
         }
     }
 

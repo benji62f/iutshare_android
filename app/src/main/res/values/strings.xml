@@ -10,8 +10,10 @@
     <string name="action_profile">Mon profil</string>
     <string name="action_connect">Se connecter</string>
     <string name="action_suscribe">S\'inscrire</string>
-    <string name="action_add_lesson"> Ajouter un cours</string>
-    <string name="action_add_ad"> Ajouter une annonce</string>
+    <string name="action_add_lesson">Ajouter un cours</string>
+    <string name="action_add_ad">Ajouter une annonce</string>
+    <string name="action_refresh">Raffraichir</string>
+
 
     <string-array name="formations">
         <item>GEII</item>

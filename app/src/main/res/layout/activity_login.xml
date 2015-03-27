@@ -38,49 +38,50 @@
         android:paddingBottom="@dimen/activity_vertical_margin">
 
         <TextView
-            android:id="@+id/username_tv"
+            android:id="@+id/login_username_tv"
             android:text="Pseudo :"
             android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/username_et"
+            android:id="@+id/login_username_et"
             android:inputType="text"
-            android:layout_below="@id/username_tv"
+            android:layout_below="@id/login_username_tv"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/password_tv"
+            android:id="@+id/login_password_tv"
             android:text="Mot de passe :"
             android:textSize="20dp"
-            android:layout_below="@id/username_et"
+            android:layout_below="@id/login_username_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/password_et"
-            android:layout_below="@id/password_tv"
+            android:id="@+id/login_password_et"
+            android:layout_below="@id/login_password_tv"
             android:inputType="textPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"/>
         <Button
-            android:id="@+id/connexion_bt"
+            android:id="@+id/login_connexion_bt"
             android:onClick="login"
             android:background="@color/green"
             android:textColor="@color/white"
             android:padding="5dp"
             android:text="Connexion"
-            android:layout_below="@id/password_et"
+            android:layout_below="@id/login_password_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/inscription_bt"
+            android:id="@+id/login_inscription_bt"
+            android:onClick="suscribe"
             android:background="@color/purple"
             android:textColor="@color/white"
             android:padding="5dp"
             android:text="Vous êtes nouveau ? Cliquez ici"
-            android:layout_toRightOf="@id/connexion_bt"
-            android:layout_below="@id/password_et"
+            android:layout_toRightOf="@id/login_connexion_bt"
+            android:layout_below="@id/login_password_et"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

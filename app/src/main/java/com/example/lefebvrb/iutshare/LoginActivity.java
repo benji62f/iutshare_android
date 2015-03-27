@@ -45,8 +45,8 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     public void login(View view){
-        String login = ((EditText) findViewById(R.id.username_et)).getText().toString();
-        String password = ((EditText) findViewById(R.id.password_et)).getText().toString();
+        String login = ((EditText) findViewById(R.id.login_username_et)).getText().toString();
+        String password = ((EditText) findViewById(R.id.login_password_et)).getText().toString();
         System.out.println("Login :\""+login+"\"\nPassword : \""+password+"\"");
         if(login.equals("") || password.equals(""))
             Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show();
@@ -74,11 +74,6 @@ public class LoginActivity extends ActionBarActivity {
 
                     int reponse = urlConnection.getResponseCode();
                     Toast.makeText(getApplicationContext(), "Code réponse : "+reponse, Toast.LENGTH_LONG).show();
-
-                    InputStream in = urlConnection.getInputStream();
-                    String contentAsString = readIt(in, 500);
-
-                    System.out.println(contentAsString);
 
                     if(reponse == 504)
                         Toast.makeText(getApplicationContext(), "Gateway Time-out", Toast.LENGTH_LONG).show();
@@ -125,15 +120,10 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    // Reads an InputStream and converts it to a String.
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
+    public void suscribe(View view){
+        Intent intent = new Intent(LoginActivity.this, SuscribeActivity.class);
+        startActivity(intent);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

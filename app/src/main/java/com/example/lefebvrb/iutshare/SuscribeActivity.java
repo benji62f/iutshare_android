@@ -49,60 +49,64 @@ public class SuscribeActivity extends ActionBarActivity {
 
         System.out.println("Nom : "+nom+"\nPrenom : "+prenom+"\nPseudo : "+pseudo+"\nMot de passe : "+mdp+"\nType : "+type);
 
-        try {
-            URL url;
-            DataOutputStream printout;
-            DataInputStream input;
-            url = new URL(MainActivity.URL + "v1/user/");
-            System.out.println(url);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-            urlConnection.setUseCaches(false);
-
-            urlConnection.setConnectTimeout(5000);
-            urlConnection.setReadTimeout(5000);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("User-Agent", "GYUserAgentAndroid");
-            urlConnection.setRequestProperty("Accept","*/*");
-            //urlConnection.connect();
-
-            //int reponse = urlConnection.getResponseCode();
-
-            JSONObject object = new JSONObject();
+        if(nom.equals("") || prenom.equals("") || pseudo.equals("") || mdp.equals("")){
+            Toast.makeText(getApplicationContext(), "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show();
+        } else {
             try {
-                object.put("nom", nom);
-                object.put("prenom", prenom);
-                object.put("login", pseudo);
-                object.put("mdp", mdp);
-                object.put("type", type);
-                object.put("id", 0);
-            } catch (JSONException e) {
+                URL url;
+                DataOutputStream printout;
+                DataInputStream input;
+                url = new URL(MainActivity.URL + "v1/user/");
+                System.out.println(url);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+                urlConnection.setUseCaches(false);
+
+                urlConnection.setConnectTimeout(5000);
+                urlConnection.setReadTimeout(5000);
+
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("User-Agent", "GYUserAgentAndroid");
+                urlConnection.setRequestProperty("Accept","*/*");
+                //urlConnection.connect();
+
+                //int reponse = urlConnection.getResponseCode();
+
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("nom", nom);
+                    object.put("prenom", prenom);
+                    object.put("login", pseudo);
+                    object.put("mdp", mdp);
+                    object.put("type", type);
+                    object.put("id", 0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(object);
+
+
+                DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
+                out.writeBytes(object.toString());
+                out.flush();
+                out.close();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                JSONObject reponse = new JSONObject(in.readLine());
+                String login = reponse.getString("login");
+                if(login == null)
+                    Toast.makeText(getApplicationContext(), "L'inscription a échouée", Toast.LENGTH_LONG).show();
+                else if(login.equals(pseudo)){
+                    Toast.makeText(getApplicationContext(), "Inscription réussie", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(SuscribeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            } catch(Exception e){
                 e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Erreur connexion réseau", Toast.LENGTH_LONG).show();
             }
-            System.out.println(object);
-
-
-            DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-            out.writeBytes(object.toString());
-            out.flush();
-            out.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            JSONObject reponse = new JSONObject(in.readLine());
-            String login = reponse.getString("login");
-            if(login == null)
-                Toast.makeText(getApplicationContext(), "L'inscription a échouée", Toast.LENGTH_LONG).show();
-            else if(login.equals(pseudo)){
-                Toast.makeText(getApplicationContext(), "Inscription réussie", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SuscribeActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Erreur connexion réseau", Toast.LENGTH_LONG).show();
         }
     }
 
